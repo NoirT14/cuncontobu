@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Dancing+Script:wght@400..700&family=Nothing+You+Could+Do&family=Roboto:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Buttons</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            font-family: "Dancing Script", cursive;
+            background-color: #f0f8ff;
+            background-image: url('meomeoo.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        main {
+            text-align: center;
+        }
+
+        img {
+            height: 372px;
+            width: 372px;
+        }
+
+        h1 {
+            font-size: 72px;
+            color: rgb(247, 7, 47);
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 27px 0;
+        }
+
+        .btn-container button {
+            background-color: rgb(247, 7, 47);
+            color: white;
+            font-family: "Dancing Script", cursive;
+            border: none;
+            padding: 15px 30px;
+            font-size: 27px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: font-size 0.3s ease;
+        }
+
+        #no {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <img src="Shiba 01.gif" alt="Shiba Dog" id="shiba-img">
+        <h1>Bé Nắngg, Làm người yêu của anh Tấn nhá !!!</h1>
+        <div id="yes" class="btn-container">
+            <button type="button" id="yes-btn">Đồng ý</button>
+        </div>
+        <div id="no" class="btn-container">
+            <button type="button" id="no-btn">Không</button>
+        </div>
+    </main>
+
+    <script>
+        let hoverCount = 0;
+        const no = document.getElementById('no');
+        const yesBtn = document.getElementById('yes-btn');
+        const title = document.querySelector('h1');
+        const img = document.getElementById('shiba-img');
+
+        no.addEventListener('mouseover', () => {
+            hoverCount++;
+
+            const buttonWidth = no.offsetWidth;
+            const buttonHeight = no.offsetHeight;
+
+            // Lấy kích thước và vị trí của các phần tử khác
+            const titleRect = title.getBoundingClientRect();
+            const yesRect = yesBtn.getBoundingClientRect();
+            const imgRect = img.getBoundingClientRect();
+
+            // Giới hạn vị trí để không đè vào các thành phần khác
+            const safeZone = 20; // Khoảng cách an toàn
+            const maxX = window.innerWidth - buttonWidth - safeZone; // Giới hạn ngang
+            const maxY = window.innerHeight - buttonHeight - safeZone; // Giới hạn dọc
+
+            let x, y;
+
+            do {
+                x = Math.random() * maxX;
+                y = Math.random() * maxY;
+            } while (
+                // Kiểm tra xem vị trí có đè lên tiêu đề không
+                (x < titleRect.right + safeZone && x + buttonWidth > titleRect.left - safeZone &&
+                    y < titleRect.bottom + safeZone && y + buttonHeight > titleRect.top - safeZone) ||
+                // Kiểm tra xem vị trí có đè lên nút "Đồng ý" không
+                (x < yesRect.right + safeZone && x + buttonWidth > yesRect.left - safeZone &&
+                    y < yesRect.bottom + safeZone && y + buttonHeight > yesRect.top - safeZone) ||
+
+                (x < imgRect.right + safeZone && x + buttonWidth > imgRect.left - safeZone &&
+                    y < imgRect.bottom + safeZone && y + buttonHeight > imgRect.top - safeZone)
+            );
+
+            // Đặt vị trí mới cho nút "Không"
+            no.style.position = 'absolute';
+            no.style.left = `${x}px`;
+            no.style.top = `${y}px`;
+
+            img.src = "Shiba 02.gif";
+
+            setTimeout(() => {
+                img.src = "Shiba 01.gif";
+            }, 1500);
+
+            // Tăng kích thước nút "Đồng ý"
+            const currentSize = parseInt(window.getComputedStyle(yesBtn).fontSize, 10);
+            yesBtn.style.fontSize = `${currentSize + 5}px`;
+
+            // Nếu trỏ vào lần thứ 7 thì ẩn nút "Không"
+            if (hoverCount === 7) {
+                no.style.display = 'none'; // Ẩn nút "Không"
+            }
+        });
+
+        yesBtn.addEventListener('click', () => {
+            const alertContainer = document.createElement('div');
+            alertContainer.style.position = 'fixed';
+            alertContainer.style.top = '0';
+            alertContainer.style.left = '0';
+            alertContainer.style.width = '100%';
+            alertContainer.style.height = '100%';
+            alertContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            alertContainer.style.display = 'flex';
+            alertContainer.style.justifyContent = 'center';
+            alertContainer.style.alignItems = 'center';
+
+            const alertBox = document.createElement('div');
+            alertBox.style.backgroundColor = 'white';
+            alertBox.style.padding = '20px';
+            alertBox.style.borderRadius = '10px';
+            alertBox.style.textAlign = 'center';
+            alertBox.style.fontFamily = "Dancing Script, cursive";
+
+            const alertText = document.createElement('p');
+            alertText.innerText = 'Bé Nắng đã chắc chắn chưa?';
+            alertText.style.fontSize = '24px';
+            alertText.style.marginBottom = '20px';
+
+            const confirmButton = document.createElement('button');
+            confirmButton.innerText = 'Chắc chắn';
+            confirmButton.style.backgroundColor = 'rgb(247, 7, 47)';
+            confirmButton.style.color = 'white';
+            confirmButton.style.fontFamily = "Dancing Script, cursive";
+            confirmButton.style.fontSize = '20px';
+            confirmButton.style.padding = '10px 20px';
+            confirmButton.style.border = 'none';
+            confirmButton.style.borderRadius = '5px';
+            confirmButton.style.cursor = 'pointer';
+            confirmButton.addEventListener('click', () => {
+                window.location.href = 'success.html';
+            });
+
+            alertBox.appendChild(alertText);
+            alertBox.appendChild(confirmButton);
+            alertContainer.appendChild(alertBox);
+            document.body.appendChild(alertContainer);
+        });
+    </script>
+</body>

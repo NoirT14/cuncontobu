@@ -1,0 +1,231 @@
+/* Reset body styles */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    font-family: "Dancing Script", cursive; /* Thêm font-family */
+}
+
+/* Container for heartbeat animation */
+.container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+/* Default styles for heartbeat lines */
+.heartbeat-line {
+    position: relative;
+    width: 400px;
+    height: 100px;
+    opacity: 0; /* Initially hidden */
+    transform: scale(0.8);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.left {
+    margin-right: 72px; /* Space between left line and heart */
+}
+
+.right {
+    margin-left: 72px; /* Space between right line and heart */
+}
+
+.heartbeat-line svg {
+    width: 100%;
+    height: 100%;
+}
+
+.line {
+    fill: none;
+    stroke: red;
+    stroke-width: 6;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+
+/* Default styles for heart */
+.heart {
+    height: 140px;
+    width: 140px;
+    position: relative;
+    transform: rotate(-45deg) scale(0.8);
+    background: #f20044;
+    box-shadow: -20px 20px 180px #f20044;
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+/* Heart animation */
+@keyframes heart {
+    0% {
+        transform: rotate(-45deg) scale(1.27);
+    }
+    80% {
+        transform: rotate(-45deg) scale(1.072);
+    }
+    100% {
+        transform: rotate(-45deg) scale(0.72);
+    }
+}
+
+.heart:before {
+    content: '';
+    position: absolute;
+    height: 140px;
+    width: 140px;
+    background: #f20044;
+    top: -50%;
+    border-radius: 100px;
+    box-shadow: -20px -20px 180px #f20044;
+}
+
+.heart::after {
+    content: '';
+    position: absolute;
+    height: 140px;
+    width: 140px;
+    background: #f20044;
+    right: -50%;
+    border-radius: 100px;
+    box-shadow: 20px 20px 180px #f20044;
+}
+
+/* Button styles */
+#startButton {
+    padding: 20px 20px;
+    font-size: 16px;
+    background-color: rgb(236, 81, 143);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 72px;
+}
+
+#startButton:hover {
+    background-color: rgb(247, 7, 47);
+}
+
+/* Sequential animations */
+
+/* Show left heartbeat line */
+.show-left .heartbeat-line.left {
+    opacity: 1;
+    transform: scale(1);
+    animation: heartbeat-line-draw-left 2s forwards;
+}
+
+/* Show heart */
+.show-heart .heart {
+    opacity: 1;
+    transform: rotate(-45deg) scale(1);
+    animation: heart 0.6s linear infinite;
+}
+
+/* Show right heartbeat line */
+.show-right .heartbeat-line.right {
+    opacity: 1;
+    transform: scale(1);
+    animation: heartbeat-line-draw-right 6s forwards;
+    animation-delay: 6s;
+}
+
+/* SVG stroke effect */
+.heartbeat-line svg polyline{
+    fill: none;
+    stroke: red;
+    stroke-width: 6;
+    stroke-dasharray: 2000; /* Dài đoạn đường */
+    stroke-dashoffset: 2000; /* Ban đầu đường bị ẩn */
+    animation: heartbeat-line-draw 6s linear forwards;
+}
+
+.heartbeat-line.right svg polyline {
+    fill: none;
+    stroke: red;
+    stroke-width: 6;
+    stroke-dasharray: 2000; /* Dài đoạn đường */
+    stroke-dashoffset: 2000; /* Ban đầu đường bị ẩn */
+    animation: heartbeat-line-draw 6s linear forwards;
+    animation-delay: 6s; /* Đặt độ trễ 6 giây */
+}
+
+@keyframes heartbeat-line-draw{
+    from {
+        stroke-dashoffset: 2000;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+.popup {
+    display: none; /* Ẩn popup ban đầu */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 900px;
+    height: 600px;
+    background-image: url('letter.png'); /* Thay bằng đường dẫn hình ảnh của bạn */
+    background-size: cover; /* Đảm bảo hình ảnh phủ toàn bộ popup */
+    background-position: center; /* Canh giữa hình ảnh */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    overflow: hidden;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Nội dung popup */
+.popup-content {
+    padding: 40px 80px;
+    text-align: center;
+}
+
+.popup h1 {
+    margin-bottom: 15px;
+    font-size: 27px;
+    color: rgb(236, 81, 143);
+}
+
+.popup p {
+    margin-bottom: 10px;
+    font-size: 17px;
+    color: rgb(236, 81, 143);
+}
+
+#continueButton {
+    padding: 10px 20px; /* Khoảng cách giữa nội dung và viền */
+    background-color: rgb(236, 81, 143); /* Màu nền (hồng nổi bật) */
+    color: white; /* Màu chữ (trắng) */
+    border: none; /* Không có viền */
+    border-radius: 8px; /* Làm bo tròn các góc */
+    font-size: 16px; /* Cỡ chữ */
+    font-weight: bold; /* Chữ đậm */
+    cursor: pointer; /* Thay đổi con trỏ thành dạng tay khi hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Tạo hiệu ứng bóng */
+    transition: all 0.3s ease; /* Hiệu ứng mượt khi thay đổi trạng thái */
+}
+
+/* Hiệu ứng khi di chuột vào nút */
+#continueButton:hover {
+    background-color: #e63673; /* Đổi màu nền thành hồng đậm hơn */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3); /* Tăng bóng cho nút */
+    transform: scale(1.05); /* Phóng to nhẹ khi hover */
+}
+
+/* Hiệu ứng khi nhấn vào nút */
+#continueButton:active {
+    background-color: #c72d60; /* Màu nền tối hơn khi nhấn */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Giảm bóng khi nhấn */
+    transform: scale(0.95); /* Thu nhỏ nhẹ khi nhấn */
+}
